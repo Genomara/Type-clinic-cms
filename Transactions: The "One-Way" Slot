@@ -1,0 +1,11 @@
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+
+-- Receptionists can insert, but NOT view, update, or delete
+CREATE POLICY "Receptionists can create transactions"
+ON transactions FOR INSERT
+WITH CHECK (get_staff_role() = 'receptionist');
+
+-- Only Admins can view the money trail
+CREATE POLICY "Admins can view transactions"
+ON transactions FOR SELECT
+USING (get_staff_role() = 'admin');
