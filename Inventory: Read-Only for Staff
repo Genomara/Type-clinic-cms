@@ -1,0 +1,11 @@
+ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
+
+-- Everyone can view inventory
+CREATE POLICY "Staff can view inventory"
+ON inventory FOR SELECT
+USING (true);
+
+-- Only Admin can update stock or prices
+CREATE POLICY "Admins can manage inventory"
+ON inventory FOR ALL
+USING (get_staff_role() = 'admin');
