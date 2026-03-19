@@ -1,0 +1,5 @@
+CREATE TRIGGER tr_audit_inventory_price
+AFTER UPDATE ON inventory
+FOR EACH ROW
+WHEN (OLD.unit_price IS DISTINCT FROM NEW.unit_price OR OLD.current_stock IS DISTINCT FROM NEW.current_stock)
+EXECUTE FUNCTION process_audit_log();
