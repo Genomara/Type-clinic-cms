@@ -1,0 +1,4 @@
+CREATE OR REPLACE FUNCTION get_staff_role()
+RETURNS TEXT AS $$
+  SELECT role FROM public.staff WHERE id = auth.uid();
+$$ LANGUAGE sql SECURITY DEFINER;
