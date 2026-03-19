@@ -1,0 +1,22 @@
+ALTER TABLE clinical_orders ENABLE ROW LEVEL SECURITY;
+
+-- 1. Doctors: View and Create anything
+CREATE POLICY "Doctors have full order access"
+ON clinical_orders FOR ALL
+USING (get_staff_role() = 'doctor')
+WITH CHECK (get_staff_role() = 'doctor');
+
+-- 2. Pharmacy: Can ONLY see orders marked 'paid'
+-- This is the critical anti-leakage lock.
+CREATE POLICY "Pharmacy can only see paid orders"
+ON clinical_orders FOR SELECT
+USING (
+    get_staff_role() = 'pharmacy' 
+    AND order_status = 'paid'
+);
+
+-- 3. Pharmacy: Can update status to 'dispensed'
+CREATE POLICY "Pharmacy can update to dispensed"
+ON clinical_orders FOR UPDATE
+USING (get_staff_role() = 'pharmacy')
+WITH CHECK (order_status = 'dispensed');
