@@ -1,0 +1,11 @@
+ALTER TABLE staff ENABLE ROW LEVEL SECURITY;
+
+-- Staff can only view their own profile
+CREATE POLICY "Staff can view own profile"
+ON staff FOR SELECT
+USING (auth.uid() = id);
+
+-- Admin can see everyone (Essential for management)
+CREATE POLICY "Admins can view all staff"
+ON staff FOR SELECT
+USING (get_staff_role() = 'admin');
