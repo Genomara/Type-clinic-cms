@@ -1,0 +1,11 @@
+SELECT 
+    changed_at,
+    staff.full_name as staff_member,
+    table_name,
+    old_value->>'item_name' as item,
+    old_value->>'unit_price' as old_price,
+    new_value->>'unit_price' as new_price
+FROM audit_logs
+JOIN staff ON audit_logs.changed_by = staff.id
+WHERE table_name = 'inventory'
+ORDER BY changed_at DESC;
