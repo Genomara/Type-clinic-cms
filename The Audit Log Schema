@@ -1,0 +1,14 @@
+CREATE TABLE audit_logs (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    table_name TEXT NOT NULL,
+    record_id UUID NOT NULL,
+    action TEXT NOT NULL, -- 'UPDATE' or 'DELETE'
+    old_value JSONB,
+    new_value JSONB,
+    changed_by UUID REFERENCES staff(id),
+    changed_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Indexing for fast retrieval by the Owner
+CREATE INDEX idx_audit_logs_table_name ON audit_logs(table_name);
+CREATE INDEX idx_audit_logs_changed_at ON audit_logs(changed_at);
