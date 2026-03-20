@@ -110,3 +110,14 @@ const NavButton = ({ active, onClick, label, icon }) => (
 );
 
 export default ClinicApp;
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+// This is the "Mounting" logic that makes the app visible
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<ClinicApp />);
+}
+
+export default ClinicApp;
